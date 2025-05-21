@@ -1,3 +1,4 @@
+import StampStartModal from "@/components/StampStartModal";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useLayoutEffect } from "react";
@@ -18,5 +19,10 @@ export default function RootLayout() {
     return null; // 로딩 중
   }
 
-  return <Stack />;
+  return (
+    <>
+      <Stack />
+      <StampStartModal />
+    </>
+  );
 }
