@@ -1,4 +1,4 @@
-import { StampBoardStateType } from "@/types/zustand";
+import { Board, StampBoardStateType } from "@/types/zustand";
 import { create } from "zustand";
 
 export const useBoardStore = create<StampBoardStateType>((set, get) => ({
@@ -11,24 +11,22 @@ export const useBoardStore = create<StampBoardStateType>((set, get) => ({
       nowBoard: boardId,
     })),
 
-  addBoard: (boardId: string, stampCount: number) =>
+  addBoard: (board: Board) =>
     set((state) => {
-      if (state.boards[boardId]) return state;
-
       return {
         ...state,
         boards: {
           ...state.boards,
-          [boardId]: Array(stampCount).fill(false),
+          [board.title]: board,
         },
       };
     }),
 
-  deleteBoard: (boardId: string) =>
+  deleteBoard: (boardTitle: string) =>
     set((state) => {
-      if (!state.boards[boardId]) return state;
+      if (!state.boards[boardTitle]) return state;
 
-      const { [boardId]: _, ...remainingBoards } = state.boards;
+      const { [boardTitle]: _, ...remainingBoards } = state.boards;
 
       return {
         ...state,
@@ -36,26 +34,30 @@ export const useBoardStore = create<StampBoardStateType>((set, get) => ({
       };
     }),
 
-  toggleStamp: (boardId: string, index: number, value?: boolean) =>
+  toggleStamp: (boardTitle: string, index: number, value?: boolean) =>
     set((state) => {
-      if (!state.boards[boardId]) return state;
+      const board = state.boards[boardTitle];
+      if (!board) return state;
 
-      if (index < 0 || index >= state.boards[boardId].length) return state;
+      if (index < 0 || index >= board.stamps.length) return state;
 
-      const newBoardStamps = [...state.boards[boardId]];
-      newBoardStamps[index] =
-        value !== undefined ? value : !newBoardStamps[index];
+      const newStamps = [...board.stamps];
+      newStamps[index] = value !== undefined ? value : !newStamps[index];
 
       return {
         ...state,
         boards: {
           ...state.boards,
-          [boardId]: newBoardStamps,
+          [boardTitle]: {
+            ...board,
+            stamps: newStamps,
+            updatedAt: Date.now(),
+          },
         },
       };
     }),
 
-  isExistBoardName: (boardId: string) => {
-    return Boolean(get().boards[boardId]);
+  isExistBoardName: (boardTitle: string) => {
+    return Boolean(get().boards[boardTitle]);
   },
 }));
