@@ -16,6 +16,7 @@ export interface StampBoardStateType {
   addBoard: (boardId: string, stampCount: number) => void;
   deleteBoard: (boardId: string) => void;
   toggleStamp: (boardId: string, index: number, value?: boolean) => void;
+  isExistBoardName: (boardId: string) => boolean;
 }
 
 export type ModalStoreType = ModalVisibility & ModalActions;

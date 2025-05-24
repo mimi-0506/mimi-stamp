@@ -1,7 +1,7 @@
 import { StampBoardStateType } from "@/types/zustand";
 import { create } from "zustand";
 
-export const useBoardStore = create<StampBoardStateType>((set) => ({
+export const useBoardStore = create<StampBoardStateType>((set, get) => ({
   nowBoard: "",
   boards: {},
 
@@ -54,4 +54,8 @@ export const useBoardStore = create<StampBoardStateType>((set) => ({
         },
       };
     }),
+
+  isExistBoardName: (boardId: string) => {
+    return Boolean(get().boards[boardId]);
+  },
 }));

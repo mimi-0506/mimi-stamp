@@ -1,4 +1,5 @@
 import { MODAL_KEYS } from "@/constants/modalkeys";
+import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { Picker } from "@react-native-picker/picker";
 import { throttle } from "lodash";
@@ -15,9 +16,11 @@ import {
 export default function StampStartModal() {
   const visible = useModalStore((state) => state.modals.stampStartModal);
   const closeModal = useModalStore((state) => state.closeModal);
+  const isExistBoardName = useBoardStore((state) => state.isExistBoardName);
 
   const [title, setTitle] = useState("");
   const [type, setType] = useState("포도알");
+  const stampCountRef = useRef(7);
 
   const bgOpacity = useRef(new Animated.Value(0)).current;
 
@@ -35,8 +38,9 @@ export default function StampStartModal() {
 
   const throttledValidateTitle = useRef(
     throttle((value) => {
-      // title 중복 체크 예시
-      // if (bounds.includes(value)) { /* 경고 처리 */ }
+      if (!isExistBoardName(value)) {
+        useBoardStore.getState().addBoard(value, stampCountRef.current);
+      }
     }, 500)
   ).current;
 
