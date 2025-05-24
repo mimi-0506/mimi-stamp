@@ -1,3 +1,4 @@
+import BoardGrid from "@/components/BoardGrid";
 import { MODAL_KEYS } from "@/constants/modalkeys";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
@@ -29,6 +30,7 @@ export default function Index() {
       >
         <Text className="text-white text-center">생성 모달</Text>
       </Pressable>
+      {nowBoard && boards[nowBoard] && <BoardGrid board={boards[nowBoard]} />}å
     </View>
   );
 }
