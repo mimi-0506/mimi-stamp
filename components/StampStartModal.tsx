@@ -1,17 +1,20 @@
 import { MODAL_KEYS } from "@/constants/modalkeys";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
-import { Picker } from "@react-native-picker/picker";
+import Slider from "@react-native-community/slider";
 import { throttle } from "lodash";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Keyboard,
   Modal,
   Pressable,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
+import Selector from "./Selector";
 
 export default function StampStartModal() {
   const visible = useModalStore((state) => state.modals.stampStartModal);
@@ -19,8 +22,8 @@ export default function StampStartModal() {
   const isExistBoardName = useBoardStore((state) => state.isExistBoardName);
 
   const [title, setTitle] = useState("");
-  const [type, setType] = useState("포도알");
-  const stampCountRef = useRef(7);
+  const [value, setValue] = useState("포도알");
+  const [count, setCount] = useState(7);
 
   const bgOpacity = useRef(new Animated.Value(0)).current;
 
@@ -39,7 +42,16 @@ export default function StampStartModal() {
   const throttledValidateTitle = useRef(
     throttle((value) => {
       if (!isExistBoardName(value)) {
-        useBoardStore.getState().addBoard(value, stampCountRef.current);
+        useBoardStore.getState().addBoard({
+          title: title,
+          stampCount: count,
+          stamps: Array(count).fill(false),
+          type: value,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          fillBG: "black",
+          emptyBG: "white",
+        });
       }
     }, 500)
   ).current;
@@ -59,59 +71,73 @@ export default function StampStartModal() {
       visible={visible}
       onRequestClose={() => closeModal(MODAL_KEYS.STAMPSTART_MODAL)}
     >
-      <Animated.View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: bgOpacity.interpolate({
-            inputRange: [0, 1],
-            outputRange: ["transparent", "rgba(0, 0, 0, 0.5)"],
-          }),
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
         }}
+        accessible={false}
       >
-        <View className="bg-white p-6 rounded-2xl w-3/4 shadow-lg">
-          <Text className="text-lg font-bold mb-4 text-center">
-            도장판 시작하기
-          </Text>
+        <Animated.View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: bgOpacity.interpolate({
+              inputRange: [0, 1],
+              outputRange: ["transparent", "rgba(0, 0, 0, 0.5)"],
+            }),
+          }}
+        >
+          <View className="bg-white p-6 rounded-2xl w-3/4 shadow-lg">
+            <Text className="text-lg font-bold mb-4 text-center">
+              도장판 시작하기
+            </Text>
 
-          <View className="mb-4">
-            <Text className="mb-1">제목</Text>
-            <TextInput
-              value={title}
-              onChangeText={setTitle}
-              className="border border-gray-300 rounded px-2 py-1"
-            />
-          </View>
+            <View className="mb-4">
+              <Text className="mb-1">제목</Text>
+              <TextInput
+                value={title}
+                onChangeText={setTitle}
+                className="border border-gray-300 rounded px-2 py-1"
+              />
+            </View>
 
-          <View className="mb-4">
-            <Text className="mb-1">타입 선택</Text>
+            <View className="mb-4">
+              <Text className="mb-1">도장판 타입</Text>
+              <Selector value={value} setValue={setValue} />
+            </View>
 
-            <Picker
-              selectedValue={type}
-              onValueChange={(itemValue, itemIndex) => setType(itemValue)}
+            <View className="mb-4">
+              <Text className="mb-1">도장 개수: {count}개</Text>
+              <View className="flex-row items-center space-x-2">
+                <Pressable onPress={() => setCount(Math.max(7, count - 1))}>
+                  <Text className="text-xl px-2">−</Text>
+                </Pressable>
+                <Slider
+                  style={{ flex: 1, height: 40 }}
+                  minimumValue={7}
+                  maximumValue={365}
+                  step={1}
+                  value={count}
+                  onValueChange={setCount}
+                  minimumTrackTintColor="#000000"
+                  maximumTrackTintColor="#dddddd"
+                />
+                <Pressable onPress={() => setCount(Math.min(365, count + 1))}>
+                  <Text className="text-xl px-2">＋</Text>
+                </Pressable>
+              </View>
+            </View>
+
+            <Pressable
+              onPress={onSubmit}
+              className="bg-blue-500 px-4 py-2 rounded"
             >
-              <Picker.Item label="포도알" value="포도알" />
-              <Picker.Item label="커스텀" value="커스텀" />
-            </Picker>
+              <Text className="text-white text-center">도장판 시작</Text>
+            </Pressable>
           </View>
-
-          <View className="mb-4">
-            <Text className="mb-1">도장 개수 (7~365)</Text>
-            <TextInput
-              keyboardType="numeric"
-              className="border border-gray-300 rounded px-2 py-1"
-            />
-          </View>
-
-          <Pressable
-            onPress={onSubmit}
-            className="bg-blue-500 px-4 py-2 rounded"
-          >
-            <Text className="text-white text-center">도장판 시작</Text>
-          </Pressable>
-        </View>
-      </Animated.View>
+        </Animated.View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
