@@ -2,6 +2,7 @@ import BoardGrid from "@/components/BoardGrid";
 import { MODAL_KEYS } from "@/constants/keys";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 import tw from "twrnc";
@@ -9,11 +10,38 @@ import tw from "twrnc";
 export default function Index() {
   const openModal = useModalStore((state) => state.openModal);
   const boards = useBoardStore((state) => state.boards);
+  const setBoards = useBoardStore((state) => state.setBoards);
   const nowBoard = useBoardStore((state) => state.nowBoard);
 
   useEffect(() => {
-    if (Object.keys(boards).length === 0)
-      openModal(MODAL_KEYS.STAMPSTART_MODAL);
+    const loadBoards = async () => {
+      try {
+        const storedBoards = await AsyncStorage.getItem("mimistamp_boards");
+        if (storedBoards) {
+          const parsedBoards = JSON.parse(storedBoards);
+          setBoards(parsedBoards);
+
+          if (Object.keys(parsedBoards).length === 0)
+            openModal(MODAL_KEYS.STAMPSTART_MODAL);
+        }
+      } catch (e) {
+        console.error("Failed to load boards:", e);
+      }
+    };
+
+    loadBoards();
+  }, []);
+
+  useEffect(() => {
+    const storageSave = async () => {
+      try {
+        await AsyncStorage.setItem("mimistamp_boards", JSON.stringify(boards));
+      } catch (e) {
+        console.error("Failed to save boards:", e);
+      }
+    };
+
+    storageSave();
   }, [boards]);
 
   return (

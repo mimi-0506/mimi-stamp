@@ -11,17 +11,27 @@ export const useBoardStore = create<StampBoardStateType>((set, get) => ({
       nowBoard: boardId,
     })),
 
-  addBoard: (board: Board) =>
+  setBoards: (boards: Record<string, Board>) =>
+    set((state) => ({
+      ...state,
+      boards: boards,
+      nowBoard: Object.keys(boards)[0] || "",
+    })),
+
+  addBoard: (board: Board) => {
     set((state) => {
+      const newBoards = {
+        ...state.boards,
+        [board.title]: board,
+      };
+
       return {
         ...state,
-        boards: {
-          ...state.boards,
-          [board.title]: board,
-        },
+        boards: newBoards,
         nowBoard: board.title,
       };
-    }),
+    });
+  },
 
   deleteBoard: (boardTitle: string) =>
     set((state) => {

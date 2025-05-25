@@ -25,6 +25,7 @@ export interface StampBoardStateType {
   boards: Record<string, Board>;
 
   setNowBoard: (boardTitle: string) => void;
+  setBoards: (boards: Record<string, Board>) => void;
 
   addBoard: (board: Board) => void;
 
