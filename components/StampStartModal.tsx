@@ -3,7 +3,7 @@ import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
 import Slider from "@react-native-community/slider";
 import { throttle } from "lodash";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Keyboard,
@@ -11,7 +11,6 @@ import {
   Pressable,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import tw from "twrnc";
@@ -25,6 +24,7 @@ export default function StampStartModal() {
   const closeModal = useModalStore((state) => state.closeModal);
   const isExistBoardName = useBoardStore((state) => state.isExistBoardName);
   const addBoard = useBoardStore((state) => state.addBoard);
+  const boards = useBoardStore((state) => state.boards);
 
   const [title, setTitle] = useState("");
   const [value, setValue] = useState(BOARD_KEYS.DEFAULT);
@@ -80,17 +80,18 @@ export default function StampStartModal() {
       visible={visible}
       onRequestClose={() => closeModal(MODAL_KEYS.STAMPSTART_MODAL)}
     >
-      <TouchableWithoutFeedback
-        onPress={() => Keyboard.dismiss()}
-        accessible={false}
+      <Pressable
+        onPress={() => {
+          Keyboard.dismiss();
+          if (Object.keys(boards).length > 0) {
+            closeModal(MODAL_KEYS.STAMPSTART_MODAL);
+          }
+        }}
+        style={tw`flex-1`}
       >
         <Animated.View
           style={[
-            {
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-            },
+            tw`flex-1 justify-center items-center`,
             {
               backgroundColor: bgOpacity.interpolate({
                 inputRange: [0, 1],
@@ -160,7 +161,7 @@ export default function StampStartModal() {
             </Pressable>
           </View>
         </Animated.View>
-      </TouchableWithoutFeedback>
+      </Pressable>
     </Modal>
   );
 }
