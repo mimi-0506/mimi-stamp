@@ -1,4 +1,4 @@
-import { MODAL_KEYS } from "@/constants/modalkeys";
+import { MODAL_KEYS } from "@/constants/keys";
 import { ModalKeyType, ModalStoreType } from "@/types/zustand";
 import { create } from "zustand";
 

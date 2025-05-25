@@ -1,5 +1,5 @@
 import BoardGrid from "@/components/BoardGrid";
-import { MODAL_KEYS } from "@/constants/modalkeys";
+import { MODAL_KEYS } from "@/constants/keys";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { useEffect } from "react";
@@ -13,15 +13,10 @@ export default function Index() {
   useEffect(() => {
     if (Object.keys(boards).length === 0)
       openModal(MODAL_KEYS.STAMPSTART_MODAL);
-
-    console.log("Boards updated:", boards);
   }, [boards]);
 
   return (
     <View className="flex-1 items-center justify-center bg-white p-4">
-      <Text className="text-lg font-pyeojin text-black">
-        커스텀 폰트 적용됨!
-      </Text>
       <Pressable
         onPress={() => {
           openModal(MODAL_KEYS.STAMPSTART_MODAL);
@@ -30,7 +25,7 @@ export default function Index() {
       >
         <Text className="text-white text-center">생성 모달</Text>
       </Pressable>
-      {nowBoard && boards[nowBoard] && <BoardGrid board={boards[nowBoard]} />}å
+      {nowBoard && boards[nowBoard] && <BoardGrid board={boards[nowBoard]} />}
     </View>
   );
 }
