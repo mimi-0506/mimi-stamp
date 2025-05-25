@@ -14,6 +14,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import tw from "twrnc";
+
+import CustomImagePicker from "./CustomImagePicker";
 import DefaultColorPicker from "./DefaultColorPicker";
 import Selector from "./Selector";
 
@@ -44,6 +47,7 @@ export default function StampStartModal() {
   const throttledValidateTitle = useRef(
     throttle((value) => {
       if (!isExistBoardName(value) && value.length > 0) {
+        // Validation logic (empty here)
       }
     }, 500)
   ).current;
@@ -75,48 +79,51 @@ export default function StampStartModal() {
       onRequestClose={() => closeModal(MODAL_KEYS.STAMPSTART_MODAL)}
     >
       <TouchableWithoutFeedback
-        onPress={() => {
-          Keyboard.dismiss();
-        }}
+        onPress={() => Keyboard.dismiss()}
         accessible={false}
       >
         <Animated.View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: bgOpacity.interpolate({
-              inputRange: [0, 1],
-              outputRange: ["transparent", "rgba(0, 0, 0, 0.5)"],
-            }),
-          }}
+          style={[
+            {
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            {
+              backgroundColor: bgOpacity.interpolate({
+                inputRange: [0, 1],
+                outputRange: ["transparent", "rgba(0, 0, 0, 0.5)"],
+              }),
+            },
+          ]}
         >
-          <View className="bg-white p-6 rounded-2xl w-3/4 shadow-lg">
-            <Text className="text-lg font-bold mb-4 text-center">
+          <View style={tw`bg-white p-6 rounded-2xl w-3/4 shadow-lg`}>
+            <Text style={tw`text-lg font-bold mb-4 text-center`}>
               도장판 시작하기
             </Text>
 
-            <View className="mb-4">
-              <Text className="mb-1">제목</Text>
+            <View style={tw`mb-4`}>
+              <Text style={tw`mb-1`}>제목</Text>
               <TextInput
                 value={title}
                 onChangeText={setTitle}
-                className="border border-gray-300 rounded px-2 py-1"
+                style={tw`border border-gray-300 rounded px-2 py-1`}
               />
             </View>
 
-            <View className="mb-4">
-              <Text className="mb-1">도장판 타입</Text>
+            <View style={tw`mb-4`}>
+              <Text style={tw`mb-1`}>도장판 타입</Text>
               <Selector value={value} setValue={setValue} />
             </View>
 
+            {value === BOARD_KEYS.CUSTOM && <CustomImagePicker />}
             {value === BOARD_KEYS.DEFAULT && <DefaultColorPicker />}
 
-            <View className="mb-4">
-              <Text className="mb-1">도장 개수: {count}개</Text>
-              <View className="flex-row items-center space-x-2">
+            <View style={tw`mb-4`}>
+              <Text style={tw`mb-1`}>도장 개수: {count}개</Text>
+              <View style={tw`flex-row items-center space-x-2`}>
                 <Pressable onPress={() => setCount(Math.max(7, count - 1))}>
-                  <Text className="text-xl px-2">−</Text>
+                  <Text style={tw`text-xl px-2`}>−</Text>
                 </Pressable>
                 <Slider
                   style={{ flex: 1, height: 40 }}
@@ -129,16 +136,16 @@ export default function StampStartModal() {
                   maximumTrackTintColor="#dddddd"
                 />
                 <Pressable onPress={() => setCount(Math.min(365, count + 1))}>
-                  <Text className="text-xl px-2">＋</Text>
+                  <Text style={tw`text-xl px-2`}>＋</Text>
                 </Pressable>
               </View>
             </View>
 
             <Pressable
               onPress={onSubmit}
-              className="bg-blue-500 px-4 py-2 rounded"
+              style={tw`bg-blue-500 px-4 py-2 rounded`}
             >
-              <Text className="text-white text-center">도장판 시작</Text>
+              <Text style={tw`text-white text-center`}>도장판 시작</Text>
             </Pressable>
           </View>
         </Animated.View>

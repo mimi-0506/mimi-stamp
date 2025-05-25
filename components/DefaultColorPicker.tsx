@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import ColorPicker, { Panel5 } from "reanimated-color-picker";
+import tw from "twrnc";
 
 interface Props {
   fillBG: string;
@@ -17,16 +18,17 @@ export default function DefaultColorPicker() {
 
   return (
     <View>
-      <Text className="mb-2 mt-4">도장 찍기 전</Text>
-      <View className="relative">
+      <Text style={tw`mb-2 mt-4`}>도장 찍기 전</Text>
+      <View style={tw`relative`}>
         <Pressable
           onPress={() => setPickerVisible((x) => !x)}
-          className="w-10 h-10 border"
-          style={{ backgroundColor: emptyBG }}
+          style={[tw`w-10 h-10 border`, { backgroundColor: emptyBG }]}
         />
 
         {pickerVisible && (
-          <View className="absolute top-12 left-0 z-50 bg-white p-2 rounded-xl shadow-lg w-60">
+          <View
+            style={tw`absolute top-12 left-0 z-50 bg-white p-2 rounded-xl shadow-lg w-60`}
+          >
             <ColorPicker
               onComplete={({ hex }) => {
                 console.log(hex);
@@ -38,7 +40,7 @@ export default function DefaultColorPicker() {
         )}
       </View>
 
-      <Text className="mb-2 mt-4">도장 찍은 후</Text>
+      <Text style={tw`mb-2 mt-4`}>도장 찍은 후</Text>
     </View>
   );
 }

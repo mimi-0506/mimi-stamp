@@ -4,6 +4,7 @@ import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
+import tw from "twrnc";
 
 export default function Index() {
   const openModal = useModalStore((state) => state.openModal);
@@ -16,14 +17,14 @@ export default function Index() {
   }, [boards]);
 
   return (
-    <View className="flex-1 items-center justify-center bg-white p-4">
+    <View style={tw`flex-1 items-center justify-center bg-white p-4`}>
       <Pressable
         onPress={() => {
           openModal(MODAL_KEYS.STAMPSTART_MODAL);
         }}
-        className="bg-red-500 px-4 py-2 rounded mt-4"
+        style={tw`bg-red-500 px-4 py-2 rounded mt-4`}
       >
-        <Text className="text-white text-center">생성 모달</Text>
+        <Text style={tw`text-white text-center`}>생성 모달</Text>
       </Pressable>
       {nowBoard && boards[nowBoard] && <BoardGrid board={boards[nowBoard]} />}
     </View>
