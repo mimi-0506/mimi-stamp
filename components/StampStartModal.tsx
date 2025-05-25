@@ -29,6 +29,8 @@ export default function StampStartModal() {
   const [title, setTitle] = useState("");
   const [value, setValue] = useState(BOARD_KEYS.DEFAULT);
   const [count, setCount] = useState(7);
+  const [fillBG, setFillBG] = useState<string>("black");
+  const [emptyBG, setEmptyBG] = useState<string>("white");
 
   const bgOpacity = useRef(new Animated.Value(0)).current;
 
@@ -64,8 +66,8 @@ export default function StampStartModal() {
       type: value,
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      fillBG: "black",
-      emptyBG: "white",
+      fillBG: fillBG,
+      emptyBG: emptyBG,
     });
 
     closeModal(MODAL_KEYS.STAMPSTART_MODAL);
@@ -116,12 +118,21 @@ export default function StampStartModal() {
               <Selector value={value} setValue={setValue} />
             </View>
 
-            {value === BOARD_KEYS.CUSTOM && <CustomImagePicker />}
-            {value === BOARD_KEYS.DEFAULT && <DefaultColorPicker />}
+            <View style={tw`relative z-2 mb-10`}>
+              {value === BOARD_KEYS.CUSTOM && <CustomImagePicker />}
+              {value === BOARD_KEYS.DEFAULT && (
+                <DefaultColorPicker
+                  fillBG={fillBG}
+                  setFillBG={setFillBG}
+                  emptyBG={emptyBG}
+                  setEmptyBG={setEmptyBG}
+                />
+              )}
+            </View>
 
-            <View style={tw`mb-4`}>
-              <Text style={tw`mb-1`}>도장 개수: {count}개</Text>
-              <View style={tw`flex-row items-center space-x-2`}>
+            <View style={tw`relative z-1 mb-4`}>
+              <Text style={tw`mb-1`}>도장 개수 {count}개</Text>
+              <View style={tw`flex-row items-center`}>
                 <Pressable onPress={() => setCount(Math.max(7, count - 1))}>
                   <Text style={tw`text-xl px-2`}>−</Text>
                 </Pressable>

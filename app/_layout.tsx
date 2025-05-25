@@ -2,6 +2,7 @@ import StampStartModal from "@/components/StampStartModal";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useLayoutEffect } from "react";
+import "react-native-reanimated";
 import "../global.css";
 
 export default function RootLayout() {

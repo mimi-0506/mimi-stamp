@@ -1,46 +1,66 @@
-import { useState } from "react";
+import { isValidColor } from "@/utils/colorUtils";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import ColorPicker, { Panel5 } from "reanimated-color-picker";
 import tw from "twrnc";
+import ColorSelector from "./ColorSelector";
 
-interface Props {
+export default function DefaultColorPicker({
+  fillBG,
+  setFillBG,
+  emptyBG,
+  setEmptyBG,
+}: {
   fillBG: string;
+  setFillBG: Dispatch<SetStateAction<string>>;
   emptyBG: string;
-  setFillBG: (color: string) => void;
-  setEmptyBG: (color: string) => void;
-}
+  setEmptyBG: Dispatch<SetStateAction<string>>;
+}) {
+  const [fillBGPickerVisible, setFillBGPickerVisible] = useState(false);
+  const [emptyBGPickerVisible, setEmptyBGPickerVisible] = useState(false);
 
-export default function DefaultColorPicker() {
-  const [fillBG, setFillBG] = useState<string>("black");
-  const [emptyBG, setEmptyBG] = useState<string>("white");
-
-  const [pickerVisible, setPickerVisible] = useState(false);
+  useEffect(() => {
+    if (fillBGPickerVisible) setEmptyBGPickerVisible(false);
+    if (emptyBGPickerVisible) setFillBGPickerVisible(false);
+  }, [fillBGPickerVisible, emptyBGPickerVisible]);
 
   return (
     <View>
-      <Text style={tw`mb-2 mt-4`}>도장 찍기 전</Text>
-      <View style={tw`relative`}>
-        <Pressable
-          onPress={() => setPickerVisible((x) => !x)}
-          style={[tw`w-10 h-10 border`, { backgroundColor: emptyBG }]}
-        />
+      <Pressable
+        onPress={() => {
+          setEmptyBGPickerVisible(false);
+          setFillBGPickerVisible(false);
+        }}
+        onStartShouldSetResponder={() => true}
+        style={tw`flex-row items-center justify-around`}
+      >
+        <View style={tw`relative flex flex-col items-center`}>
+          <Text style={tw`mb-2 mt-4`}>도장 찍기 전</Text>
+          <Pressable
+            onPress={() => setEmptyBGPickerVisible((x) => !x)}
+            style={[tw`w-10 h-10 border`, { backgroundColor: emptyBG }]}
+          />
+          {emptyBGPickerVisible && (
+            <ColorSelector
+              bg={isValidColor(emptyBG) ? emptyBG : "white"}
+              setBG={setEmptyBG}
+            />
+          )}
+        </View>
 
-        {pickerVisible && (
-          <View
-            style={tw`absolute top-12 left-0 z-50 bg-white p-2 rounded-xl shadow-lg w-60`}
-          >
-            <ColorPicker
-              onComplete={({ hex }) => {
-                console.log(hex);
-              }}
-            >
-              <Panel5 />
-            </ColorPicker>
-          </View>
-        )}
-      </View>
-
-      <Text style={tw`mb-2 mt-4`}>도장 찍은 후</Text>
+        <View style={tw`relative flex flex-col items-center`}>
+          <Text style={tw`mb-2 mt-4`}>도장 찍은 후</Text>
+          <Pressable
+            onPress={() => setFillBGPickerVisible((x) => !x)}
+            style={[tw`w-10 h-10 border`, { backgroundColor: fillBG }]}
+          />
+          {fillBGPickerVisible && (
+            <ColorSelector
+              bg={isValidColor(fillBG) ? fillBG : "black"}
+              setBG={setFillBG}
+            />
+          )}
+        </View>
+      </Pressable>
     </View>
   );
 }
