@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import DefaultColorPicker from "./DefaultColorPicker";
 import Selector from "./Selector";
 
 export default function StampStartModal() {
@@ -42,17 +43,7 @@ export default function StampStartModal() {
 
   const throttledValidateTitle = useRef(
     throttle((value) => {
-      if (!isExistBoardName(value)) {
-        useBoardStore.getState().addBoard({
-          title: title,
-          stampCount: count,
-          stamps: Array(count).fill(false),
-          type: value,
-          createdAt: Date.now(),
-          updatedAt: Date.now(),
-          fillBG: "black",
-          emptyBG: "white",
-        });
+      if (!isExistBoardName(value) && value.length > 0) {
       }
     }, 500)
   ).current;
@@ -62,6 +53,17 @@ export default function StampStartModal() {
   }, [title]);
 
   const onSubmit = () => {
+    addBoard({
+      title: title,
+      stampCount: count,
+      stamps: Array(count).fill(false),
+      type: value,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      fillBG: "black",
+      emptyBG: "white",
+    });
+
     closeModal(MODAL_KEYS.STAMPSTART_MODAL);
   };
 
@@ -107,6 +109,8 @@ export default function StampStartModal() {
               <Text className="mb-1">도장판 타입</Text>
               <Selector value={value} setValue={setValue} />
             </View>
+
+            {value === BOARD_KEYS.DEFAULT && <DefaultColorPicker />}
 
             <View className="mb-4">
               <Text className="mb-1">도장 개수: {count}개</Text>

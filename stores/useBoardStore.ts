@@ -19,6 +19,7 @@ export const useBoardStore = create<StampBoardStateType>((set, get) => ({
           ...state.boards,
           [board.title]: board,
         },
+        nowBoard: board.title,
       };
     }),
 
