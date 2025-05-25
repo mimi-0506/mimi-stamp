@@ -1,4 +1,4 @@
-import { MODAL_KEYS } from "@/constants/modalkeys";
+import { BOARD_KEYS, MODAL_KEYS } from "@/constants/keys";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
 import Slider from "@react-native-community/slider";
@@ -20,9 +20,10 @@ export default function StampStartModal() {
   const visible = useModalStore((state) => state.modals.stampStartModal);
   const closeModal = useModalStore((state) => state.closeModal);
   const isExistBoardName = useBoardStore((state) => state.isExistBoardName);
+  const addBoard = useBoardStore((state) => state.addBoard);
 
   const [title, setTitle] = useState("");
-  const [value, setValue] = useState("포도알");
+  const [value, setValue] = useState(BOARD_KEYS.DEFAULT);
   const [count, setCount] = useState(7);
 
   const bgOpacity = useRef(new Animated.Value(0)).current;
