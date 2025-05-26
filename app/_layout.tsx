@@ -1,8 +1,11 @@
+import Background from "@/components/Background";
 import StampStartModal from "@/components/StampStartModal";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useLayoutEffect } from "react";
+import { Platform } from "react-native";
 import "react-native-reanimated";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import "../global.css";
 
 export default function RootLayout() {
@@ -22,8 +25,22 @@ export default function RootLayout() {
 
   return (
     <>
-      <Stack />
-      <StampStartModal />
+      <Background />
+      <SafeAreaProvider>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            paddingTop: Platform.OS === "android" ? 25 : 0,
+          }}
+        >
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          />
+          <StampStartModal />
+        </SafeAreaView>
+      </SafeAreaProvider>
     </>
   );
 }

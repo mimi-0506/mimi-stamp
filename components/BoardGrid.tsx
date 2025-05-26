@@ -39,7 +39,7 @@ export default function BoardGrid({ board }: { board: Board }) {
   return (
     <>
       {isLoading && <Loading />}
-      <View style={tw`mt-5`}>
+      <View style={tw`mt-5 bg-transparent`}>
         <Text style={tw`w-full text-center text-lg font-bold mb-2`}>
           {board.title}
         </Text>
