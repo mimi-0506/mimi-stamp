@@ -1,90 +1,62 @@
-import { useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
-import {
-  ImagePickerResponse,
-  launchImageLibrary,
-  MediaType,
-} from "react-native-image-picker";
+import { isImageFormat } from "@/utils/formatUtils";
+import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import tw from "twrnc";
 
-const ImagePreview = ({
-  uri,
-  onPress,
-  title,
-}: {
-  uri: string;
-  onPress: () => void;
-  title: string;
-}) => (
-  <View>
-    <Text style={tw`mb-1 text-sm text-gray-600`}>{title}</Text>
-    <Pressable
-      onPress={onPress}
-      style={tw`border border-gray-300 rounded p-3 items-center`}
-    >
-      {uri ? (
-        <View style={tw`items-center`}>
-          <Image
-            source={{ uri }}
-            style={tw`w-20 h-20 rounded mb-2`}
-            resizeMode="cover"
-          />
-          <Text style={tw`text-xs text-gray-500`}>탭하여 변경</Text>
-        </View>
-      ) : (
-        <View style={tw`items-center py-4`}>
-          <Text style={tw`text-gray-400 text-4xl mb-2`}>📷</Text>
-          <Text style={tw`text-gray-500`}>이미지 선택</Text>
-        </View>
-      )}
-    </Pressable>
-  </View>
-);
+const ImageSelector = ({ BG }: { BG: string }) => {
+  return isImageFormat(BG) ? (
+    <Image source={{ uri: BG }} style={tw`w-32 h-32 rounded-lg`} />
+  ) : (
+    <Text style={tw`text-center text-gray-400`}>이미지를 선택하세요</Text>
+  );
+};
 
 export default function CustomImagePicker() {
   const [fillBG, setFillBG] = useState<string>("");
   const [emptyBG, setEmptyBG] = useState<string>("");
 
-  const selectImage = (setter: (uri: string) => void, title: string) => {
-    const options = {
-      mediaType: "photo" as MediaType,
-      includeBase64: false,
-      maxHeight: 2000,
-      maxWidth: 2000,
-      quality: 0.8,
-    };
-
-    launchImageLibrary(options, (response: ImagePickerResponse) => {
-      if (response.didCancel || response.errorMessage) return;
-
-      if (response.assets && response.assets.length > 0) {
-        const imageUri = response.assets[0].uri;
-        if (imageUri) setter(imageUri);
-      }
+  const selectImage = async (setBG: Dispatch<SetStateAction<string>>) => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
     });
+
+    if (!result.canceled) console.log(result.assets[0].uri);
+
+    if (result.assets && result.assets.length > 0) {
+      const selectedImage = result.assets[0].uri;
+      setBG(selectedImage);
+    }
   };
 
   return (
     <View style={tw`mb-4`}>
       <Text style={tw`mb-2 font-medium`}>도장 이미지</Text>
 
-      <View style={tw`space-y-3`}>
-        <ImagePreview
-          uri={fillBG}
-          onPress={() => selectImage(setFillBG, "채워진 도장 이미지")}
-          title="채워진 도장 이미지"
-        />
-
-        <ImagePreview
-          uri={emptyBG}
-          onPress={() => selectImage(setEmptyBG, "비어있는 도장 이미지")}
-          title="비어있는 도장 이미지"
-        />
+      <View>
+        <Text>도장 찍기 전</Text>
+        <Pressable
+          onPress={() => {
+            selectImage(setEmptyBG);
+          }}
+        >
+          <ImageSelector BG={emptyBG} />
+        </Pressable>
       </View>
 
-      <Text style={tw`text-xs text-gray-500 mt-2`}>
-        💡 팁: 도장이 찍힌 상태와 빈 상태의 이미지를 각각 선택해주세요
-      </Text>
+      <View>
+        <Text>도장 찍은 후</Text>
+        <Pressable
+          onPress={() => {
+            selectImage(setFillBG);
+          }}
+        >
+          <ImageSelector BG={fillBG} />
+        </Pressable>
+      </View>
     </View>
   );
 }
