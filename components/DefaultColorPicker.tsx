@@ -1,4 +1,4 @@
-import { isValidColor } from "@/utils/colorUtils";
+import { isValidColor } from "@/utils/formatUtils";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import tw from "twrnc";

@@ -6,3 +6,9 @@ export function isValidColor(color: string) {
 
   return hexRegex.test(color) || rgbRegex.test(color) || rgbaRegex.test(color);
 }
+
+//나중에 정확한 이미지 포맷 검사로 변경 필요
+export const isImageFormat = (uri: string): boolean => {
+  const allowed = ["jpg", "jpeg", "png", "gif", "webp", "content://"];
+  return allowed.some((ext) => uri.toLowerCase().includes(ext));
+};
