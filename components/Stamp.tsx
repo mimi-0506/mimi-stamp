@@ -9,11 +9,13 @@ export default memo(function Stamp({
   fillBG,
   emptyBG,
   onPress,
+  handleImageComplete,
 }: {
   filled: boolean;
   fillBG: string;
   emptyBG: string;
   onPress: () => void;
+  handleImageComplete: () => void;
 }) {
   const uri = filled ? fillBG : emptyBG;
   const [hasError, setHasError] = useState(false);
@@ -37,6 +39,7 @@ export default memo(function Stamp({
             style={sizeStyle}
             contentFit="cover"
             onError={() => setHasError(true)}
+            onLoadEnd={handleImageComplete}
             cachePolicy="disk"
             transition={100}
           />

@@ -7,7 +7,11 @@ import Loading from "./Loading";
 import Stamp from "./Stamp";
 
 export default function BoardGrid({ board }: { board: Board }) {
+  const { handleImageComplete, isAllLoaded } = useImageLoadTrack(
+    board.stampCount
+  );
   const [localStamps, setLocalStamps] = useState(board.stamps);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 페이지 떠날 때 전역 상태 갱신
   useEffect(() => {
@@ -15,6 +19,10 @@ export default function BoardGrid({ board }: { board: Board }) {
       // 페이지 언마운트 시 전역 상태 업데이트
     };
   }, []);
+
+  useEffect(() => {
+    if (isAllLoaded) setIsLoading(false);
+  }, [isAllLoaded]);
 
   // 스탬프 토글 핸들러 (로컬 상태만 갱신)
   const handleToggle = useCallback(
@@ -29,10 +37,12 @@ export default function BoardGrid({ board }: { board: Board }) {
   );
 
   return (
-    <View style={tw`mt-5`}>
-      <Text style={tw`w-full text-center text-lg font-bold mb-2`}>
-        {board.title}
-      </Text>
+    <>
+      {isLoading && <Loading />}
+      <View style={tw`mt-5`}>
+        <Text style={tw`w-full text-center text-lg font-bold mb-2`}>
+          {board.title}
+        </Text>
 
         <FlatList
           data={localStamps}
