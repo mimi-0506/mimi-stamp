@@ -55,12 +55,8 @@ export default function BoardGrid({ board }: { board: Board }) {
   return (
     <>
       {isLoading && <Loading />}
-      <View style={tw`mt-5 bg-transparent flex flex-col items-center`}>
+      <View style={tw`mt-5 bg-transparent flex-col items-center`}>
         <View style={tw`flex-row justify-between items-center mb-2`}>
-          <Text style={tw`w-full text-center text-lg font-bold mb-2`}>
-            {board.title}
-          </Text>
-
           <Pressable onPress={onDeleteBoard}>
             <Text>삭제</Text>
           </Pressable>

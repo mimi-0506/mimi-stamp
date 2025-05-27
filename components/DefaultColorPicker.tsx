@@ -33,7 +33,7 @@ export default function DefaultColorPicker({
         onStartShouldSetResponder={() => true}
         style={tw`flex-row items-center justify-around`}
       >
-        <View style={tw`relative flex flex-col items-center`}>
+        <View style={tw`relative flex-col items-center`}>
           <Text style={tw`mb-2 mt-4`}>도장 찍기 전</Text>
           <Pressable
             onPress={() => setEmptyBGPickerVisible((x) => !x)}
@@ -47,7 +47,7 @@ export default function DefaultColorPicker({
           )}
         </View>
 
-        <View style={tw`relative flex flex-col items-center`}>
+        <View style={tw`relative flex-col items-center`}>
           <Text style={tw`mb-2 mt-4`}>도장 찍은 후</Text>
           <Pressable
             onPress={() => setFillBGPickerVisible((x) => !x)}

@@ -48,7 +48,7 @@ export default function CustomImagePicker({
       <Text style={tw`mb-2 font-medium`}>도장 이미지</Text>
 
       <View style={tw`flex-row justify-around items-center`}>
-        <View style={tw`flex flex-col justify-center items-center`}>
+        <View style={tw`flex-col justify-center items-center`}>
           <Text>도장 찍기 전</Text>
           <Pressable
             onPress={() => {
