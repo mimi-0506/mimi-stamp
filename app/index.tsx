@@ -56,5 +56,6 @@ export default function Index() {
       </Pressable>
       {nowBoard && boards[nowBoard] && <BoardGrid board={boards[nowBoard]} />}
     </View>
+        <TitleNavigation />
   );
 }
