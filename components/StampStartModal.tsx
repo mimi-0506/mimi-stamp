@@ -29,8 +29,8 @@ export default function StampStartModal() {
   const [title, setTitle] = useState("");
   const [value, setValue] = useState(BOARD_KEYS.DEFAULT);
   const [count, setCount] = useState(7);
-  const [fillBG, setFillBG] = useState<string>("black");
-  const [emptyBG, setEmptyBG] = useState<string>("white");
+  const [fillBG, setFillBG] = useState<string>("#000000");
+  const [emptyBG, setEmptyBG] = useState<string>("#ffffff");
 
   const bgOpacity = useRef(new Animated.Value(0)).current;
 
@@ -68,6 +68,7 @@ export default function StampStartModal() {
       updatedAt: Date.now(),
       fillBG: fillBG,
       emptyBG: emptyBG,
+      background: "#ffffff",
     });
 
     closeModal(MODAL_KEYS.STAMPSTART_MODAL);

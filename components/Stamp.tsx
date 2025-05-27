@@ -25,7 +25,10 @@ export default memo(function Stamp({
     <Pressable onPress={onPress} style={tw`m-0.5`}>
       {isValidColor(uri) ? (
         <View
-          style={[sizeStyle, { backgroundColor: uri }]}
+          style={[
+            sizeStyle,
+            { backgroundColor: uri, borderColor: "gray", borderWidth: 1 },
+          ]}
           onLayout={handleImageComplete}
         />
       ) : isImageFormat(uri) ? (
