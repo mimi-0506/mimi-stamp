@@ -120,7 +120,14 @@ export default function StampStartModal() {
             </View>
 
             <View style={tw`relative z-2 mb-10`}>
-              {value === BOARD_KEYS.CUSTOM && <CustomImagePicker />}
+              {value === BOARD_KEYS.CUSTOM && (
+                <CustomImagePicker
+                  fillBG={fillBG}
+                  setFillBG={setFillBG}
+                  emptyBG={emptyBG}
+                  setEmptyBG={setEmptyBG}
+                />
+              )}
               {value === BOARD_KEYS.DEFAULT && (
                 <DefaultColorPicker
                   fillBG={fillBG}

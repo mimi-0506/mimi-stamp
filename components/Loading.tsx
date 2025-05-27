@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { ActivityIndicator, Dimensions, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -26,13 +26,15 @@ export default function Loading() {
     <Animated.View
       pointerEvents={"auto"}
       style={[
-        tw`absolute z-[9999] justify-center items-center bg-black bg-opacity-50`,
+        tw`absolute z-20 justify-center items-center bg-black bg-opacity-50`,
         { width, height },
         animatedStyle,
       ]}
     >
-      <View style={tw`p-5 bg-white rounded-lg`}>
-        <ActivityIndicator size="large" color="white" />
+      <View>
+        <Text style={tw`text-lg font-bold mb-3 text-center text-white`}>
+          로딩 중...
+        </Text>
       </View>
     </Animated.View>
   );

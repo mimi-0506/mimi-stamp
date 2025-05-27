@@ -1,3 +1,4 @@
+import { sizeStyle } from "@/constants/widths";
 import { isImageFormat, isValidColor } from "@/utils/formatUtils";
 import { Image } from "expo-image";
 import { memo, useState } from "react";
@@ -19,7 +20,6 @@ export default memo(function Stamp({
 }) {
   const uri = filled ? fillBG : emptyBG;
   const [hasError, setHasError] = useState(false);
-  const sizeStyle = tw`w-10 h-10 rounded`;
 
   return (
     <Pressable onPress={onPress} style={tw`m-0.5`}>
