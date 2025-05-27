@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useLayoutEffect } from "react";
 import { Platform } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import "../global.css";
@@ -26,21 +27,23 @@ export default function RootLayout() {
   return (
     <>
       <Background />
-      <SafeAreaProvider>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            paddingTop: Platform.OS === "android" ? 25 : 0,
-          }}
-        >
-          <Stack
-            screenOptions={{
-              headerShown: false,
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <SafeAreaView
+            style={{
+              flex: 1,
+              paddingTop: Platform.OS === "android" ? 25 : 0,
             }}
-          />
-          <StampStartModal />
-        </SafeAreaView>
-      </SafeAreaProvider>
+          >
+            <Stack
+              screenOptions={{
+                headerShown: false,
+              }}
+            />
+            <StampStartModal />
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
     </>
   );
 }
