@@ -10,11 +10,12 @@ export default function TitleNavigation() {
   const titles = Object.keys(boards);
 
   return (
-    <View style={tw`w-full bg-white h-12 mt-5`}>
+    <View style={tw`w-full bg-white h-12 mt-5 bg-transparent`}>
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={tw`w-full flex-row `}
+        style={tw`bg-transparent`}
+        contentContainerStyle={tw`w-full flex-row bg-transparent`}
         data={titles}
         keyExtractor={(item) => item}
         renderItem={({ item: title }) => (

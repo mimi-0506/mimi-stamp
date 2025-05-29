@@ -80,7 +80,7 @@ export default function BoardGrid({ board }: { board: Board }) {
   return (
     <>
       {isLoading && <Loading />}
-      <View style={tw`mt-5 bg-transparent flex-col items-center`}>
+      <View style={tw`mt-5 bg-transparent flex-col items-center justfiy-start`}>
         <View style={tw`w-full flex-row justify-between items-center mb-2`}>
           <View style={tw`w-50 flex-row justify-between`}>
             <Pressable onPress={onChangeStampSize}>

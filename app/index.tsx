@@ -16,7 +16,6 @@ export default function Index() {
   const boards = useBoardStore((state) => state.boards);
   const setBoards = useBoardStore((state) => state.setBoards);
   const nowBoard = useBoardStore((state) => state.nowBoard);
-  const resetBoards = useBoardStore((state) => state.resetBoards);
 
   useEffect(() => {
     console.log(boards);
@@ -78,7 +77,11 @@ export default function Index() {
 
   return (
     <GestureDetector gesture={panGesture}>
-      <View style={tw`flex-col items-center justify-center bg-white p-4`}>
+      <View
+        style={[
+          tw`flex-1 flex-col items-center justify-center bg-transparent  p-4`,
+        ]}
+      >
         <SideNavigation
           openMenu={openMenu}
           closeMenu={closeMenu}

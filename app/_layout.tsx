@@ -27,17 +27,21 @@ export default function RootLayout() {
   return (
     <>
       <Background />
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView
+        style={{ flex: 1, backgroundColor: "transparent" }}
+      >
         <SafeAreaProvider>
           <SafeAreaView
             style={{
               flex: 1,
               paddingTop: Platform.OS === "android" ? 25 : 0,
+              backgroundColor: "transparent",
             }}
           >
             <Stack
               screenOptions={{
                 headerShown: false,
+                contentStyle: { backgroundColor: "transparent" },
               }}
             />
             <StampStartModal />
