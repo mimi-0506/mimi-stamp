@@ -18,6 +18,10 @@ type Board = {
   updatedAt: number;
   fillBG: string;
   emptyBG: string;
+  background: string;
+
+  numberView: boolean;
+  stampSize: boolean; //true는 크게, false 는 작게
 };
 
 export interface StampBoardStateType {
@@ -26,7 +30,8 @@ export interface StampBoardStateType {
 
   setNowBoard: (boardTitle: string) => void;
   setBoards: (boards: Record<string, Board>) => void;
-
+  resetBoards: () => void;
+  modifyBoard: (boardTitle: string, updatedBoard: Partial<Board>) => void;
   addBoard: (board: Board) => void;
 
   deleteBoard: (boardTitle: string) => void;

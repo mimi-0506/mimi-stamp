@@ -9,6 +9,8 @@ export function isValidColor(color: string) {
 
 //나중에 정확한 이미지 포맷 검사로 변경 필요
 export const isImageFormat = (uri: string): boolean => {
+  if (!uri) return false;
+
   const allowed = ["jpg", "jpeg", "png", "gif", "webp", "content://"];
-  return allowed.some((ext) => uri.toLowerCase().includes(ext));
+  return allowed.some((ext) => uri?.toLowerCase().includes(ext));
 };

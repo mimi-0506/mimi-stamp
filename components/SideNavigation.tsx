@@ -1,3 +1,6 @@
+import { MODAL_KEYS } from "@/constants/keys";
+import { useBoardStore } from "@/stores/useBoardStore";
+import { useModalStore } from "@/stores/useModalStore";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
   SharedValue,
@@ -14,9 +17,20 @@ export default function SidebarNavigation({
   closeMenu: () => void;
   translateX: SharedValue<number>;
 }) {
+  const openModal = useModalStore((state) => state.openModal);
+  const resetBoards = useBoardStore((state) => state.resetBoards);
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
   }));
+
+  const openNewBoardModal = () => {
+    openModal(MODAL_KEYS.STAMPSTART_MODAL);
+  };
+
+  const resetAllBoards = () => {
+    resetBoards();
+  };
 
   return (
     <Animated.View

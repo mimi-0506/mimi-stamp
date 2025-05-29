@@ -3,6 +3,7 @@ import useImageLoadTrack from "@/hooks/useImageLoadTrack";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { Board } from "@/types/zustand";
+import { selectImage } from "@/utils/imageUtils";
 import { useCallback, useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import tw from "twrnc";
@@ -17,14 +18,26 @@ export default function BoardGrid({ board }: { board: Board }) {
   const openModal = useModalStore((state) => state.openModal);
   const boards = useBoardStore((state) => state.boards);
   const setNowBoard = useBoardStore((state) => state.setNowBoard);
+  const modifyBoard = useBoardStore((state) => state.modifyBoard);
 
   const [localStamps, setLocalStamps] = useState(board.stamps);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [nowStampSize, setNowStampSize] = useState(
+    board.stampSize ? true : false
+  );
+  const [nowNumberView, setNowNumberView] = useState(board.numberView);
+  const [nowBG, setNowBG] = useState(board.background);
+
   // 페이지 떠날 때 전역 상태 갱신
   useEffect(() => {
     return () => {
-      // 페이지 언마운트 시 전역 상태 업데이트
+      modifyBoard(board.title, {
+        background: nowBG,
+        stamps: localStamps,
+        stampSize: nowStampSize,
+        numberView: nowNumberView,
+      });
     };
   }, []);
 
@@ -52,11 +65,36 @@ export default function BoardGrid({ board }: { board: Board }) {
     deleteBoard(board.title);
   };
 
+  const onChangeStampSize = () => {
+    setNowStampSize((x) => !x);
+  };
+
+  const onChangeNumberView = () => {
+    setNowNumberView((x) => !x);
+  };
+
+  const onChangeBackground = () => {
+    selectImage(setNowBG);
+  };
+
   return (
     <>
       {isLoading && <Loading />}
       <View style={tw`mt-5 bg-transparent flex-col items-center`}>
-        <View style={tw`flex-row justify-between items-center mb-2`}>
+        <View style={tw`w-full flex-row justify-between items-center mb-2`}>
+          <View style={tw`w-50 flex-row justify-between`}>
+            <Pressable onPress={onChangeStampSize}>
+              <Text>{nowStampSize ? "작게" : "크게"}</Text>
+            </Pressable>
+
+            <Pressable onPress={onChangeNumberView}>
+              <Text>숫자표시</Text>
+            </Pressable>
+
+            <Pressable onPress={onChangeBackground}>
+              <Text>배경 바꾸기</Text>
+            </Pressable>
+          </View>
           <Pressable onPress={onDeleteBoard}>
             <Text>삭제</Text>
           </Pressable>
@@ -78,6 +116,9 @@ export default function BoardGrid({ board }: { board: Board }) {
                 emptyBG={board.emptyBG}
                 onPress={() => handleToggle(index)}
                 handleImageComplete={handleImageComplete}
+                size={nowStampSize}
+                numberView={nowNumberView}
+                index={index + 1}
               />
             ))}
           </ScrollView>

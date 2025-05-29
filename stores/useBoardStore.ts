@@ -33,6 +33,25 @@ export const useBoardStore = create<StampBoardStateType>((set, get) => ({
     });
   },
 
+  modifyBoard: (boardTitle: string, updatedBoard: Partial<Board>) =>
+    set((state) => {
+      const board = state.boards[boardTitle];
+      if (!board) return state;
+      const newBoard = {
+        ...board,
+        ...updatedBoard,
+        updatedAt: Date.now(),
+      };
+      return {
+        ...state,
+        boards: {
+          ...state.boards,
+          [boardTitle]: newBoard,
+        },
+        nowBoard: boardTitle,
+      };
+    }),
+
   deleteBoard: (boardTitle: string) =>
     set((state) => {
       if (!state.boards[boardTitle]) return state;
@@ -40,10 +59,16 @@ export const useBoardStore = create<StampBoardStateType>((set, get) => ({
       const { [boardTitle]: _, ...remainingBoards } = state.boards;
 
       return {
-        ...state,
+        nowBoard: remainingBoards[Object.keys(remainingBoards)[0]]?.title,
         boards: remainingBoards,
       };
     }),
+
+  resetBoards: () =>
+    set(() => ({
+      nowBoard: "",
+      boards: {},
+    })),
 
   toggleStamp: (boardTitle: string, index: number, value?: boolean) =>
     set((state) => {

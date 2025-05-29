@@ -1,8 +1,5 @@
 import { Dimensions } from "react-native";
 
 export const { width } = Dimensions.get("window");
-const stampSize = Math.floor(width / 7);
-export const sizeStyle = {
-  width: stampSize,
-  height: stampSize,
-};
+export const stampSizeSmall = Math.floor(width / 7);
+export const stampSizeBig = Math.floor(width / 5);
