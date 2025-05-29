@@ -13,15 +13,15 @@ export default function Background() {
   const nowBoard = useBoardStore((state) => state.boards[nowBoardTitle]);
 
   useEffect(() => {
-    console.log("nowBoard:", nowBoard);
-  }, []);
+    console.log(nowBoardTitle);
+  }, [nowBoardTitle]);
 
   return (
     <View
       style={tw`absolute top-0 left-0 right-0 bottom-0 bg-white z-[-1]`}
       pointerEvents="none"
     >
-      {isImageFormat(nowBoard?.background) && (
+      {isImageFormat(nowBoard?.background) ? (
         <Image
           style={tw`absolute top-0 left-0 right-0 bottom-0 w-full h-full`}
           source={nowBoard.background}
@@ -29,6 +29,8 @@ export default function Background() {
           cachePolicy="disk"
           transition={100}
         />
+      ) : (
+        <></>
       )}
       <LinearGradient
         colors={["rgba(0,0,0,0.4)", "transparent"]}

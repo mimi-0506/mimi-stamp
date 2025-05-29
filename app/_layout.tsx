@@ -1,4 +1,5 @@
 import Background from "@/components/Background";
+import ResetModal from "@/components/ResetModal";
 import StampStartModal from "@/components/StampStartModal";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -45,6 +46,7 @@ export default function RootLayout() {
               }}
             />
             <StampStartModal />
+            <ResetModal />
           </SafeAreaView>
         </SafeAreaProvider>
       </GestureHandlerRootView>
