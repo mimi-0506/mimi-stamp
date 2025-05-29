@@ -1,6 +1,7 @@
 import { isImageFormat } from "@/utils/formatUtils";
+import { selectImage } from "@/utils/imageUtils";
 import { Image } from "expo-image";
-import * as ImagePicker from "expo-image-picker";
+
 import { Dispatch, SetStateAction } from "react";
 import { Pressable, Text, View } from "react-native";
 import tw from "twrnc";
@@ -28,21 +29,6 @@ export default function CustomImagePicker({
   emptyBG: string;
   setEmptyBG: Dispatch<SetStateAction<string>>;
 }) {
-  const selectImage = async (setBG: Dispatch<SetStateAction<string>>) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) console.log(result.assets[0].uri);
-
-    if (result.assets && result.assets.length > 0) {
-      const selectedImage = result.assets[0].uri;
-      setBG(selectedImage);
-    }
-  };
-
   return (
     <View>
       <Text style={tw`mb-2 font-medium`}>도장 이미지</Text>
